@@ -141,7 +141,9 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
                     onClick={() => handleButtonClick(run)}
                     className={`p-4 text-white font-semibold rounded-lg ${selected.runs === run ? "opacity-100" : "opacity-70"} ${buttonStyles[run]}`}
                 >
-                    {run} {(selected.runs === run || payload.overthrow === run) && <FaCheck className="inline ml-2" />}
+                    {run} {
+                        run === 4 ? '(FOUR)' : run === 6 ? '(SIX)' : null
+                    } {(selected.runs === run || payload.overthrow === run) && <FaCheck className="inline ml-2" />}
                 </button>
             ))}
             {/* Extra Runs Buttons */}
