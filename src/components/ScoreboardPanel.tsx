@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, MutableRefObject } from "react";
 import axios from "axios";
 
 const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, score: number, overs: string, wickets: number }) => {
@@ -17,7 +17,12 @@ const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, scor
 
 const matchId = '66fa843073fc3499e24b6272'
 
-const RightPanel: React.FC = () => {
+const RightPanel: React.FC<{
+    playingPlayerRef: MutableRefObject<{
+        striker: null | string;
+        bowler: null | string;
+    }>
+}> = ({ playingPlayerRef }) => {
     const [scoreBoard, setScoreBoard] = useState({
         teamA: { teamName: "", runs: 0, overs: "", wickets: 0 },
         teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
@@ -31,14 +36,16 @@ const RightPanel: React.FC = () => {
         const fetchScoreBoard = async () => {
             try {
                 const response = await axios.get(`http://localhost:6790/api/v1/match/${matchId}/scoreboard`);
-                setScoreBoard(response.data); // Assuming the API response is structured as per our state
+                playingPlayerRef.current.striker = response.data.strikerBatsman._id
+                playingPlayerRef.current.bowler = response.data.bowler._id
+                setScoreBoard(response.data);
             } catch (error) {
                 console.error("Error fetching data", error);
             }
         };
 
         fetchScoreBoard();
-    }, []);
+    }, [playingPlayerRef]);
 
     return (
         <div className="p-4 border-l border-gray-300">

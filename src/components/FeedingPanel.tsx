@@ -11,6 +11,13 @@ export interface IStatsPayload {
     wide: boolean;
 }
 
+export interface IStatsReqPayload {
+    matchId: string;
+    batsmanId: string;
+    bowlerId: string;
+    payload: IStatsPayload;
+}
+
 const buttonStyles = [
     "bg-red-500",
     "bg-green-500",
@@ -170,7 +177,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
                         <span className="bg-gray-200 text-gray-800 px-4 py-1 rounded-md">{selected.runs}</span>
                     )}
                     {
-                        selected.runs !== null && selected.runs > 0 && '+'
+                        selected.runs !== null && selected.runs > 0 && (selected.extras.length > 0 || payload.overthrow !== -1) && '+'
                     }
                     {selected.extras.map((extra) => (
                         <span key={extra} className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
