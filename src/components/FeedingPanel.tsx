@@ -27,7 +27,7 @@ const buttonStyles = [
     "bg-teal-500",
 ];
 
-const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => void }> = ({ onPayloadChange }) => {
+const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void }> = ({ onPayloadChange }) => {
     const [selected, setSelected] = useState<{
         runs: number | null;
         extras: string[];
@@ -46,35 +46,44 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => vo
     });
 
     const handleButtonClick = (value: number | keyof IStatsPayload) => {
-        console.log(value);
-
         if (typeof value === "number") {
             // Handle normal runs selection
             setSelected((prev) => {
                 // If overthrow is selected, allow normal run selection
                 if (payload.overthrow !== -1) {
                     // If the user selects runs after an overthrow, update normal and allow normal runs
-                    return { runs: value, extras: prev.extras };
+                    return { ...prev, extras: prev.extras };
                 } else {
                     // If no overthrow selected, proceed with normal selection
-                    return { ...prev, runs: value }; // Reset extras when selecting runs
+                    return { ...prev, runs: value, }; // Reset extras when selecting runs
                 }
             });
-            setPayload((prev) => ({
-                ...prev,
-                normal: value,
-                noball: false
-            }));
+            if (payload.overthrow !== -1) {
+
+                console.log(value)
+
+                setPayload((prev) => ({
+                    ...prev,
+                    overthrow: value
+                }));
+            }
+            else
+                setPayload((prev) => ({
+                    ...prev,
+                    normal: value,
+                }));
         } else if (value === "overthrow") {
-            // Allow selecting additional runs after choosing an overthrow
-            setPayload((prev) => ({
-                ...prev,
-                overthrow: payload.overthrow === -1 ? 1 : payload.overthrow + 1, // Increase overthrow count
-            }));
-            setSelected((prev) => ({
-                ...prev,
-                extras: prev.extras.filter((extra) => extra !== "overthrow"), // Remove if already included
-            }));
+            if (payload.overthrow > 0) {
+                setPayload(prev => ({
+                    ...prev, overthrow: -1
+                }))
+            } else {
+                // Allow selecting additional runs after choosing an overthrow
+                setPayload((prev) => ({
+                    ...prev,
+                    overthrow: payload.overthrow === -1 ? 1 : payload.overthrow + 1, // Increase overthrow count
+                }));
+            }
         } else {
             // Handle extra buttons (e.g., No Ball, Leg Bye, etc.)
             setSelected((prev) => {
@@ -92,7 +101,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => vo
         }
     };
 
-    const handleDone = () => {
+    const handleDone = async () => {
         // Process the selected runs and extras into the final payload
         const finalPayload: IStatsPayload = {
             normal: selected.runs ?? 0, // If no runs are selected, default to 0
@@ -104,7 +113,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => vo
         };
 
         // Call the onPayloadChange with the final payload
-        onPayloadChange([finalPayload]);
+        await onPayloadChange(finalPayload);
 
         // Reset the selections if needed
         setSelected({ runs: null, extras: [] });
@@ -128,12 +137,12 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => vo
                     onClick={() => handleButtonClick(run)}
                     className={`p-4 text-white font-semibold rounded-lg ${selected.runs === run ? "opacity-100" : "opacity-70"} ${buttonStyles[run]}`}
                 >
-                    {run} {selected.runs === run && <FaCheck className="inline ml-2" />}
+                    {run} {(selected.runs === run || payload.overthrow === run) && <FaCheck className="inline ml-2" />}
                 </button>
             ))}
             {/* Extra Runs Buttons */}
             {["noball", "legbye", "byes", "wide"].map((type, index) => {
-                const isTick = payload[type as keyof IStatsPayload] && payload[type as keyof IStatsPayload] !== -1;
+                const isTick = (payload[type as keyof IStatsPayload] && payload[type as keyof IStatsPayload] !== -1);
 
                 return (
                     <button
@@ -160,7 +169,9 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload[]) => vo
                     {selected.runs !== null && (
                         <span className="bg-gray-200 text-gray-800 px-4 py-1 rounded-md">{selected.runs}</span>
                     )}
-                    +
+                    {
+                        selected.runs !== null && selected.runs > 0 && '+'
+                    }
                     {selected.extras.map((extra) => (
                         <span key={extra} className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
                             {extra}
