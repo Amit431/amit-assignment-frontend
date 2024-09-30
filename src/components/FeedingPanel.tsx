@@ -66,9 +66,6 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
                 }
             });
             if (payload.overthrow !== -1) {
-
-                console.log(value)
-
                 setPayload((prev) => ({
                     ...prev,
                     overthrow: value
@@ -88,7 +85,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
                 // Allow selecting additional runs after choosing an overthrow
                 setPayload((prev) => ({
                     ...prev,
-                    overthrow: payload.overthrow === -1 ? 1 : payload.overthrow + 1, // Increase overthrow count
+                    overthrow: payload.overthrow === -1 ? payload.normal : payload.overthrow + 1, // Increase overthrow count
                 }));
             }
         } else {
