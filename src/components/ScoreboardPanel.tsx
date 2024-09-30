@@ -1,5 +1,6 @@
-import React, { useState, useEffect, MutableRefObject } from "react";
-import axios from "axios";
+import React from "react";
+import { IScoreBoard } from "../App";
+
 
 const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, score: number, overs: string, wickets: number }) => {
     return (
@@ -15,37 +16,9 @@ const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, scor
     );
 };
 
-const matchId = '66fa843073fc3499e24b6272'
-
 const RightPanel: React.FC<{
-    playingPlayerRef: MutableRefObject<{
-        striker: null | string;
-        bowler: null | string;
-    }>
-}> = ({ playingPlayerRef }) => {
-    const [scoreBoard, setScoreBoard] = useState({
-        teamA: { teamName: "", runs: 0, overs: "", wickets: 0 },
-        teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
-        strikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
-        nonStrikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
-        bowler: { name: "", runs: 0, overs: 0 },
-    });
-
-    useEffect(() => {
-        // Fetching the data from an API
-        const fetchScoreBoard = async () => {
-            try {
-                const response = await axios.get(`http://localhost:6790/api/v1/match/${matchId}/scoreboard`);
-                playingPlayerRef.current.striker = response.data.strikerBatsman._id
-                playingPlayerRef.current.bowler = response.data.bowler._id
-                setScoreBoard(response.data);
-            } catch (error) {
-                console.error("Error fetching data", error);
-            }
-        };
-
-        fetchScoreBoard();
-    }, [playingPlayerRef]);
+    scoreBoard: IScoreBoard,
+}> = ({ scoreBoard }) => {
 
     return (
         <div className="p-4 border-l border-gray-300">
