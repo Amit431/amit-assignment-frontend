@@ -6,6 +6,12 @@ import axios from "axios";
 
 const matchId = '66fa843073fc3499e24b6272'
 
+export interface ICommentary {
+  _id: string;
+  commentary: string;
+  over: string;
+}
+
 export interface IScoreBoard {
   teamA: {
     teamName: string;
@@ -36,11 +42,12 @@ export interface IScoreBoard {
     overs: number;
   };
 
+  ballbyball: Array<ICommentary>;
+
 }
 
 
 const App: React.FC = () => {
-  const commentary = "Great shot! Four runs!";
   const playingPlayerRef = useRef<{
     striker: null | string,
     nonstriker: null | string,
@@ -51,12 +58,13 @@ const App: React.FC = () => {
     bowler: null
   })
 
-  const [scoreBoard, setScoreBoard] = useState({
+  const [scoreBoard, setScoreBoard] = useState<IScoreBoard>({
     teamA: { teamName: "", runs: 0, overs: "", wickets: 0 },
     teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
     strikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
     nonStrikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
     bowler: { name: "", runs: 0, overs: 0 },
+    ballbyball: []
   });
 
   const fetchScoreBoard = async () => {
@@ -98,7 +106,7 @@ const App: React.FC = () => {
       </div>
       <div className="w-5/12">
         <RightPanel scoreBoard={scoreBoard} />
-        <Commentary text={commentary} />
+        <Commentary commentaries={scoreBoard.ballbyball} />
       </div>
     </div>
   );
