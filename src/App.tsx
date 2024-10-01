@@ -133,17 +133,14 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="flex p-4">
+    <div className={`flex p-4 ${isEditMode ? 'bg-gray-200 min-h-screen' : ''}`}>
       <div className="w-7/12 border-r border-gray-300">
         <FeedingPanel onPayloadChange={handleDoneAction} isEditMode={isEditMode} key={isEditMode as React.Key} />
         {
-          isEditMode && <button className="col-span-3 mt-4 p-4 bg-red-500 text-white rounded-lg" onClick={() => setIsEditMode(false)}>Cancel</button>
+          isEditMode && <button className="col-span-3 mt-4 p-4 bg-red-500 text-white rounded-lg mr-4" onClick={() => setIsEditMode(false)}>Cancel</button>
         }
         <button onClick={async () => {
           const ans = confirm("You want to continue")
-          console.log('====================================');
-          console.log(ans);
-          console.log('====================================');
           if (!ans) return
           await axios.delete(`http://localhost:6790/api/v1/match/${matchId}/reset`)
           await fetchScoreBoard()

@@ -203,7 +203,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Prom
 
             {/* Done Button */}
             <button onClick={handleDone} className="col-span-3 mt-4 p-4 bg-blue-600 text-white rounded-lg">
-                Done
+                {isEditMode ? 'Edit' : 'Done'}
             </button>
         </div>
     );
