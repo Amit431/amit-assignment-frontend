@@ -139,6 +139,15 @@ const App: React.FC = () => {
         {
           isEditMode && <button className="col-span-3 mt-4 p-4 bg-red-500 text-white rounded-lg" onClick={() => setIsEditMode(false)}>Cancel</button>
         }
+        <button onClick={async () => {
+          const ans = confirm("You want to continue")
+          console.log('====================================');
+          console.log(ans);
+          console.log('====================================');
+          if (!ans) return
+          await axios.delete(`http://localhost:6790/api/v1/match/${matchId}/reset`)
+          await fetchScoreBoard()
+        }} className="border p-4 py-2 border-gray-500">Reset Match Scoreboard</button>
       </div>
       <div className="w-5/12">
         <RightPanel scoreBoard={scoreBoard} fetchScoreboard={fetchScoreBoard} />
