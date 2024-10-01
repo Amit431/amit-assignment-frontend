@@ -126,15 +126,15 @@ const App: React.FC = () => {
     }
   }
 
-  function toggleEditMode(ballId: string) {
+  function toggleEditMode(ballId: string | false) {
     return function () {
       setIsEditMode(ballId)
     }
   }
 
   return (
-    <div className={`flex p-4 ${isEditMode ? 'bg-gray-200 min-h-screen' : ''}`}>
-      <div className="w-7/12 border-r border-gray-300">
+    <div className={`flex px-4 relative ${isEditMode ? 'bg-gray-100 min-h-screen' : ''}`}>
+      <div className="w-7/12 border-r border-gray-300 sticky top-0 h-screen">
         <FeedingPanel onPayloadChange={handleDoneAction} isEditMode={isEditMode} key={isEditMode as React.Key} />
         {
           isEditMode && <button className="col-span-3 mt-4 p-4 bg-red-500 text-white rounded-lg mr-4" onClick={() => setIsEditMode(false)}>Cancel</button>
@@ -149,7 +149,7 @@ const App: React.FC = () => {
       </div>
       <div className="w-5/12">
         <RightPanel scoreBoard={scoreBoard} fetchScoreboard={fetchScoreBoard} />
-        <Commentary commentaries={scoreBoard.ballbyball} toggleEditMode={toggleEditMode} />
+        <Commentary commentaries={scoreBoard.ballbyball} toggleEditMode={toggleEditMode} isEditMode={isEditMode} />
       </div>
     </div>
   );
