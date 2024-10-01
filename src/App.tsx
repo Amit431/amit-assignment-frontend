@@ -144,6 +144,7 @@ const App: React.FC = () => {
           if (!ans) return
           await axios.delete(`http://localhost:6790/api/v1/match/${matchId}/reset`)
           await fetchScoreBoard()
+          setIsEditMode(false)
         }} className="border p-4 py-2 border-gray-500">Reset Match Scoreboard</button>
       </div>
       <div className="w-5/12">
