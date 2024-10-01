@@ -90,6 +90,7 @@ const App: React.FC = () => {
     try {
       if (isEditMode) {
         await handleEdit(isEditMode, payload)
+        fetchScoreBoard()
         return
       }
 
@@ -108,7 +109,7 @@ const App: React.FC = () => {
 
   async function handleEdit(ballId: string, payload: IStatsPayload) {
     try {
-      await axios.post(`http://localhost:6790/api/v1/match/edit/${matchId}/${ballId}`, {payload})
+      await axios.post(`http://localhost:6790/api/v1/match/edit/${matchId}/${ballId}`, { payload })
     } catch (error) {
       console.log(error);
     }
