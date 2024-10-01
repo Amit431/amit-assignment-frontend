@@ -39,6 +39,13 @@ const RightPanel: React.FC<{
                     overs={scoreBoard.teamB.overs}
                 />
             </div>
+            <div className="flex gap-2 my-2">
+                <span>Wd: {scoreBoard.teamA.wides}</span>
+                <span>NB: {scoreBoard.teamA.noballs}</span>
+                <span>LB: {scoreBoard.teamA.legbyes}</span>
+                <span>Byes: {scoreBoard.teamA.byes}</span>
+                <span>OverThrows: {scoreBoard.teamA.overthrows}</span>
+            </div>
             <div className="mt-4">
                 <h3 className="font-bold">Batsman:</h3>
                 <span className="cursor-pointer" onClick={async () => {

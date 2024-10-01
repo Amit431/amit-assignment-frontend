@@ -18,6 +18,11 @@ export interface IScoreBoard {
     runs: number;
     overs: string;
     wickets: number;
+    wides: number;
+    noballs: number;
+    legbyes: number;
+    byes: number;
+    overthrows: number;
   };
   teamB: {
     teamName: string;
@@ -61,7 +66,13 @@ const App: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState<string | false>(false)
 
   const [scoreBoard, setScoreBoard] = useState<IScoreBoard>({
-    teamA: { teamName: "", runs: 0, overs: "", wickets: 0 },
+    teamA: {
+      teamName: "", runs: 0, overs: "", wickets: 0, wides: 0,
+      noballs: 0,
+      legbyes: 0,
+      byes: 0,
+      overthrows: 0,
+    },
     teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
     strikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
     nonStrikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
