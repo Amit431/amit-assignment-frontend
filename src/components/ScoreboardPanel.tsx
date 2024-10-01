@@ -1,5 +1,6 @@
 import React from "react";
 import { IScoreBoard } from "../App";
+import axios from "axios";
 
 
 const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, score: number, overs: string, wickets: number }) => {
@@ -18,7 +19,8 @@ const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, scor
 
 const RightPanel: React.FC<{
     scoreBoard: IScoreBoard,
-}> = ({ scoreBoard }) => {
+    fetchScoreboard: () => void
+}> = ({ scoreBoard, fetchScoreboard }) => {
 
     return (
         <div className="p-4 border-l border-gray-300">
@@ -39,6 +41,10 @@ const RightPanel: React.FC<{
             </div>
             <div className="mt-4">
                 <h3 className="font-bold">Batsman:</h3>
+                <span className="cursor-pointer" onClick={async () => {
+                    await axios.put(`http://localhost:6790/api/v1//match/toggle/strike`)
+                    fetchScoreboard()
+                }}>Change Strike</span>
                 <table className="w-full border text-center">
                     <thead>
                         <tr>

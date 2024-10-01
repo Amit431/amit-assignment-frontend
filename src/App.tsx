@@ -130,7 +130,7 @@ const App: React.FC = () => {
         }
       </div>
       <div className="w-5/12">
-        <RightPanel scoreBoard={scoreBoard} />
+        <RightPanel scoreBoard={scoreBoard} fetchScoreboard={fetchScoreBoard} />
         <Commentary commentaries={scoreBoard.ballbyball} toggleEditMode={toggleEditMode} />
       </div>
     </div>
