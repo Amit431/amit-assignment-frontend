@@ -14,6 +14,11 @@ const Commentary: React.FC<{
           commentaries.map(commentary => {
             return <p key={commentary._id} className={`flex gap-4 px-2 ${isEditMode === commentary._id ? 'bg-green-300 py-1 sticky bottom-0' : ''}`}>
               <span>{commentary.over}</span>
+              <div className="flex gap-2">
+                <span>{commentary.bowlerName}</span>
+                <span>{'->'}</span>
+                <span>{commentary.strikerBatsmanName}</span>
+              </div>
               <span>{commentary.commentary}</span>
               <button type="button" onClick={toggleEditMode(commentary._id)} className="hover:font-semibold">Edit</button>
               {

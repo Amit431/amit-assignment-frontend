@@ -10,6 +10,8 @@ export interface ICommentary {
   _id: string;
   commentary: string;
   over: string;
+  strikerBatsmanName: string;
+  bowlerName: string;
 }
 
 export interface IScoreBoard {
