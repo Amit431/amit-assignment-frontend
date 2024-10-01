@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa"; // Import tick icon
 
 // Define the types for the payload
@@ -34,7 +34,7 @@ const buttonStyles = [
     "bg-teal-500",
 ];
 
-const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void }> = ({ onPayloadChange }) => {
+const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Promise<void>, isEditMode: string | false }> = ({ onPayloadChange, isEditMode }) => {
     const [selected, setSelected] = useState<{
         runs: number | null;
         extras: string[];
@@ -51,6 +51,12 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
         overthrow: -1,
         wide: false,
     });
+
+    useEffect(() => {
+        if (isEditMode) {
+            reset()
+        }
+    }, [isEditMode])
 
     const handleButtonClick = (value: number | keyof IStatsPayload) => {
         if (typeof value === "number") {
@@ -105,6 +111,19 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
         }
     };
 
+    function reset() {
+        // Reset the selections if needed
+        setSelected({ runs: null, extras: [] });
+        setPayload({
+            normal: 0,
+            noball: false,
+            legbye: false,
+            byes: false,
+            overthrow: -1,
+            wide: false,
+        });
+    }
+
     const handleDone = async () => {
         // Process the selected runs and extras into the final payload
         const finalPayload: IStatsPayload = {
@@ -119,16 +138,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => void
         // Call the onPayloadChange with the final payload
         await onPayloadChange(finalPayload);
 
-        // Reset the selections if needed
-        setSelected({ runs: null, extras: [] });
-        setPayload({
-            normal: 0,
-            noball: false,
-            legbye: false,
-            byes: false,
-            overthrow: -1,
-            wide: false,
-        });
+        reset()
     };
 
     return (

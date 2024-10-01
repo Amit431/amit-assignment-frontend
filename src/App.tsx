@@ -58,6 +58,8 @@ const App: React.FC = () => {
     bowler: null
   })
 
+  const [isEditMode, setIsEditMode] = useState<string | false>(false)
+
   const [scoreBoard, setScoreBoard] = useState<IScoreBoard>({
     teamA: { teamName: "", runs: 0, overs: "", wickets: 0 },
     teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
@@ -86,6 +88,11 @@ const App: React.FC = () => {
 
   async function handleDoneAction(payload: IStatsPayload) {
     try {
+      if (isEditMode) {
+        await handleEdit(isEditMode, payload)
+        return
+      }
+
       await axios.post(`http://localhost:6790/api/v1/match/${matchId}/update-stats`, {
         payload,
         matchId,
@@ -99,14 +106,31 @@ const App: React.FC = () => {
     }
   }
 
+  async function handleEdit(ballId: string, payload: IStatsPayload) {
+    try {
+      await axios.post(`http://localhost:6790/api/v1/match/${matchId}/${ballId}`, payload)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function toggleEditMode(ballId: string) {
+    return function () {
+      setIsEditMode(ballId)
+    }
+  }
+
   return (
     <div className="flex p-4">
       <div className="w-7/12 border-r border-gray-300">
-        <FeedingPanel onPayloadChange={handleDoneAction} />
+        <FeedingPanel onPayloadChange={handleDoneAction} isEditMode={isEditMode} key={isEditMode as React.Key} />
+        {
+          isEditMode && <button className="col-span-3 mt-4 p-4 bg-red-500 text-white rounded-lg" onClick={() => setIsEditMode(false)}>Cancel</button>
+        }
       </div>
       <div className="w-5/12">
         <RightPanel scoreBoard={scoreBoard} />
-        <Commentary commentaries={scoreBoard.ballbyball} />
+        <Commentary commentaries={scoreBoard.ballbyball} toggleEditMode={toggleEditMode} />
       </div>
     </div>
   );
