@@ -49,7 +49,7 @@ const RightPanel: React.FC<{
             <div className="mt-4">
                 <h3 className="font-bold">Batsman:</h3>
                 <span className="cursor-pointer" onClick={async () => {
-                    await axios.put(`http://localhost:6790/api/v1//match/toggle/strike`)
+                    await axios.put(`${import.meta.env.VITE_SERVER_API_URL}//match/toggle/strike`)
                     fetchScoreboard()
                 }}>Change Strike</span>
                 <table className="w-full border text-center">

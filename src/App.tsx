@@ -3,6 +3,7 @@ import FeedingPanel, { IStatsPayload } from "./components/FeedingPanel";
 import RightPanel from "./components/ScoreboardPanel";
 import Commentary from "./components/Commentary";
 import axios from "axios";
+import { FiLoader } from "react-icons/fi";
 
 const matchId = '66fa843073fc3499e24b6272'
 
@@ -66,6 +67,7 @@ const App: React.FC = () => {
   })
 
   const [isEditMode, setIsEditMode] = useState<string | false>(false)
+  const [isReady, setIsReady] = useState<boolean | null>(null)
 
   const [scoreBoard, setScoreBoard] = useState<IScoreBoard>({
     teamA: {
@@ -84,7 +86,7 @@ const App: React.FC = () => {
 
   const fetchScoreBoard = async () => {
     try {
-      const response = await axios.get(`http://localhost:6790/api/v1/match/${matchId}/scoreboard`);
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/scoreboard`);
       playingPlayerRef.current.striker = response.data.strikerBatsman._id
       playingPlayerRef.current.nonstriker = response.data.nonStrikerBatsman._id
       playingPlayerRef.current.bowler = response.data.bowler._id
@@ -95,7 +97,18 @@ const App: React.FC = () => {
     }
   };
 
+  const TestServer = async () => {
+    try {
+      await axios.get(`${import.meta.env.VITE_SERVER_API_URL}`)
+      setIsReady(true)
+    } catch (error) {
+      console.log(error);
+      setIsReady(false);
+    }
+  }
+
   useEffect(() => {
+    TestServer()
     fetchScoreBoard()
   }, [])
 
@@ -107,7 +120,7 @@ const App: React.FC = () => {
         return
       }
 
-      await axios.post(`http://localhost:6790/api/v1/match/${matchId}/update-stats`, {
+      await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/update-stats`, {
         payload,
         matchId,
         strikerId: playingPlayerRef.current.striker,
@@ -122,7 +135,7 @@ const App: React.FC = () => {
 
   async function handleEdit(ballId: string, payload: IStatsPayload) {
     try {
-      await axios.post(`http://localhost:6790/api/v1/match/edit/${matchId}/${ballId}`, { payload })
+      await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/match/edit/${matchId}/${ballId}`, { payload })
     } catch (error) {
       console.log(error);
     }
@@ -132,6 +145,19 @@ const App: React.FC = () => {
     return function () {
       setIsEditMode(ballId)
     }
+  }
+
+  if (isReady === null) {
+    return <div className="h-screen w-full flex justify-center items-center text-xl gap-4">
+      <FiLoader className="animate-spin mt-1" size={32} />
+      Setting Up...
+    </div>
+  }
+
+  if (!isReady) {
+    return <div className="h-screen w-full flex justify-center items-center text-red-500 text-lg">
+      Connection to Server Failed. Try After Sometime...
+    </div>
   }
 
   return (
@@ -144,7 +170,7 @@ const App: React.FC = () => {
         <button onClick={async () => {
           const ans = confirm("You want to continue")
           if (!ans) return
-          await axios.delete(`http://localhost:6790/api/v1/match/${matchId}/reset`)
+          await axios.delete(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/reset`)
           await fetchScoreBoard()
           setIsEditMode(false)
         }} className="border p-4 py-2 border-gray-500">Reset Match Scoreboard</button>
