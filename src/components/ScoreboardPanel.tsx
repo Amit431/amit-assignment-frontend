@@ -44,7 +44,7 @@ const RightPanel: React.FC<{
                 <span><span className="font-medium">NB:</span> {scoreBoard.teamA.noballs}</span>
                 <span><span className="font-medium">LB:</span> {scoreBoard.teamA.legbyes}</span>
                 <span><span className="font-medium">Byes:</span> {scoreBoard.teamA.byes}</span>
-                <span><span className="font-medium">OverThrows:</span> {scoreBoard.teamA.overthrows}</span>
+                {/* <span><span className="font-medium">OverThrows:</span> {scoreBoard.teamA.overthrows}</span> */}
             </div>
             <div className="mt-4">
                 <h3 className="font-bold">Batsman:</h3>
