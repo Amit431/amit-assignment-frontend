@@ -98,7 +98,7 @@ const App: React.FC = () => {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/scoreboard`);
       playingPlayerRef.current.striker = response.data.strikerBatsman._id
       playingPlayerRef.current.nonstriker = response.data.nonStrikerBatsman._id
-      playingPlayerRef.current.bowler = response.data.bowlers.find((bowler: { isBowling: boolean }) => bowler.isBowling)?._id
+      playingPlayerRef.current.bowler = response.data.bowlers?.find((bowler: { isBowling: boolean }) => bowler.isBowling)?._id
 
       setScoreBoard(response.data as IScoreBoard);
     } catch (error) {

@@ -12,19 +12,23 @@ const Commentary: React.FC<{
       <div className="flex flex-col gap-2 px-2 py-2 mt-4 relative">
         {
           commentaries.map(commentary => {
-            return <p key={commentary._id} className={`flex gap-4 px-2 ${isEditMode === commentary._id ? 'bg-green-300 py-1 sticky bottom-0' : ''}`}>
-              <span>{commentary.over}</span>
-              <div className="flex gap-2">
-                <span>{commentary.bowlerName}</span>
-                <span>{'->'}</span>
-                <span>{commentary.strikerBatsmanName}</span>
-              </div>
-              <span>{commentary.commentary}</span>
-              <button type="button" onClick={toggleEditMode(commentary._id)} className="hover:font-semibold">Edit</button>
-              {
-                isEditMode === commentary._id && <button type="button" onClick={toggleEditMode(false)} className="hover:font-medium text-red-500">Cancel</button>
-              }
-            </p>
+            return <React.Fragment key={commentary._id}>
+              {commentary.over.endsWith('.6') && <hr color="black" />}
+
+              <p className={`flex gap-4 px-2 ${isEditMode === commentary._id ? 'bg-green-300 py-1 sticky bottom-0' : ''}`}>
+                <span>{commentary.over}</span>
+                <div className="flex gap-2">
+                  <span>{commentary.bowlerName}</span>
+                  <span>{'->'}</span>
+                  <span>{commentary.strikerBatsmanName}</span>
+                </div>
+                <span>{commentary.commentary}</span>
+                <button type="button" onClick={toggleEditMode(commentary._id)} className="hover:font-semibold">Edit</button>
+                {
+                  isEditMode === commentary._id && <button type="button" onClick={toggleEditMode(false)} className="hover:font-medium text-red-500">Cancel</button>
+                }
+              </p>
+            </React.Fragment>
           })
         }
       </div>

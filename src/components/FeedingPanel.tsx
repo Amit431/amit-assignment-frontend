@@ -9,6 +9,7 @@ export interface IStatsPayload {
     byes: boolean;
     overthrow: number; // How many runs come on overthrow if no runs then -1
     wide: boolean;
+    wicket: boolean;
 }
 
 export interface IStatsReqPayload {
@@ -50,6 +51,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Prom
         byes: false,
         overthrow: -1,
         wide: false,
+        wicket: false,
     });
 
     useEffect(() => {
@@ -121,6 +123,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Prom
             byes: false,
             overthrow: -1,
             wide: false,
+            wicket: false
         });
     }
 
@@ -133,6 +136,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Prom
             byes: payload.byes,
             overthrow: payload.overthrow, // Manage overthrow separately if needed
             wide: payload.wide,
+            wicket: payload.wicket,
         };
 
         // Call the onPayloadChange with the final payload
@@ -157,7 +161,7 @@ const FeedingPanel: React.FC<{ onPayloadChange: (payload: IStatsPayload) => Prom
                 </button>
             ))}
             {/* Extra Runs Buttons */}
-            {["noball", "legbye", "byes", "wide"].map((type, index) => {
+            {["noball", "legbye", "byes", "wide", "wicket"].map((type, index) => {
                 const isTick = (payload[type as keyof IStatsPayload] && payload[type as keyof IStatsPayload] !== -1);
 
                 return (
