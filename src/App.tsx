@@ -43,12 +43,18 @@ export interface IScoreBoard {
     runs: number;
     ballsFaced: number;
   };
-
-  bowler: {
+  remainingBatsman: Partial<{
+    name: string;
+    runs: number;
+    ballsFaced: number;
+  }>[];
+  
+  bowlers: Partial<{
     name: string;
     runs: number;
     overs: number;
-  };
+    isBowling: boolean;
+  }>[];
 
   ballbyball: Array<ICommentary>;
 
@@ -80,7 +86,8 @@ const App: React.FC = () => {
     teamB: { teamName: "", score: 0, overs: "", wickets: 0 },
     strikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
     nonStrikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
-    bowler: { name: "", runs: 0, overs: 0 },
+    remainingBatsman: [],
+    bowlers: [],
     ballbyball: []
   });
 
@@ -89,7 +96,7 @@ const App: React.FC = () => {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/scoreboard`);
       playingPlayerRef.current.striker = response.data.strikerBatsman._id
       playingPlayerRef.current.nonstriker = response.data.nonStrikerBatsman._id
-      playingPlayerRef.current.bowler = response.data.bowler._id
+      playingPlayerRef.current.bowler = response.data.bowlers.find((bowler: { isBowling: boolean }) => bowler.isBowling)
 
       setScoreBoard(response.data as IScoreBoard);
     } catch (error) {

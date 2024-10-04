@@ -71,6 +71,15 @@ const RightPanel: React.FC<{
                             <td>{scoreBoard.nonStrikerBatsman.runs}</td>
                             <td>{scoreBoard.nonStrikerBatsman.ballsFaced}</td>
                         </tr>
+                        {
+                            scoreBoard.remainingBatsman?.map(bats => {
+                                return <tr key={bats.name}>
+                                    <td>{bats.name}</td>
+                                    <td>{bats.runs}</td>
+                                    <td>{bats.ballsFaced}</td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </table>
             </div>
@@ -85,11 +94,15 @@ const RightPanel: React.FC<{
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>{scoreBoard.bowler.name}</td>
-                            <td>{scoreBoard.bowler.runs}</td>
-                            <td>{scoreBoard.bowler.overs}</td>
-                        </tr>
+                        {
+                            scoreBoard.bowlers?.map(bowler => {
+                                return <tr key={bowler.name}>
+                                    <td>{bowler.name} {bowler.isBowling ? '*' : ''}</td>
+                                    <td>{bowler.runs}</td>
+                                    <td>{bowler.overs}</td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </table>
             </div>
