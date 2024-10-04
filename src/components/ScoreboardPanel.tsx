@@ -101,10 +101,10 @@ const RightPanel: React.FC<{
             </div>
             <div className="mt-2">
                 <h3 className="font-bold">Bowler:</h3>
-                <table className="w-full border text-center">
+                <table className="w-full border text-center relative">
                     <thead>
                         <tr>
-                            <th className="w-max"></th>
+                            <th className="absolute top-0 left-0"></th>
                             <th>Name</th>
                             <th>Runs</th>
                             <th>Overs</th>
@@ -114,8 +114,8 @@ const RightPanel: React.FC<{
                         {
                             scoreBoard.bowlers?.map(bowler => {
                                 return <tr key={bowler.name}>
-                                    <td className="w-max">
-                                        {isOverEnd && <button onClick={() => changeBowler(bowler?._id || '')} className="border border-yellow-300 bg-yellow-200 hover:bg-yellow-300 px-4 text-sm rounded-sm">Select</button>}
+                                    <td className="absolute left-2 opacity-70 hover:opacity-100">
+                                        {isOverEnd && <button onClick={() => changeBowler(bowler?._id || '')} className="border border-yellow-300 bg-yellow-200 px-4 text-sm rounded-sm">Select</button>}
                                     </td>
                                     <td>
                                         {bowler.name} {bowler.isBowling ? '*' : ''}</td>
