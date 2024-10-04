@@ -48,7 +48,7 @@ export interface IScoreBoard {
     runs: number;
     ballsFaced: number;
   }>[];
-  
+
   bowlers: Partial<{
     name: string;
     runs: number;
@@ -57,7 +57,7 @@ export interface IScoreBoard {
   }>[];
 
   ballbyball: Array<ICommentary>;
-
+  isOverEnd: boolean;
 }
 
 
@@ -88,7 +88,8 @@ const App: React.FC = () => {
     nonStrikerBatsman: { name: "", runs: 0, ballsFaced: 0 },
     remainingBatsman: [],
     bowlers: [],
-    ballbyball: []
+    ballbyball: [],
+    isOverEnd: false,
   });
 
   const fetchScoreBoard = async () => {
@@ -96,7 +97,7 @@ const App: React.FC = () => {
       const response = await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/match/${matchId}/scoreboard`);
       playingPlayerRef.current.striker = response.data.strikerBatsman._id
       playingPlayerRef.current.nonstriker = response.data.nonStrikerBatsman._id
-      playingPlayerRef.current.bowler = response.data.bowlers.find((bowler: { isBowling: boolean }) => bowler.isBowling)
+      playingPlayerRef.current.bowler = response.data.bowlers.find((bowler: { isBowling: boolean }) => bowler.isBowling)?._id
 
       setScoreBoard(response.data as IScoreBoard);
     } catch (error) {

@@ -21,6 +21,7 @@ const RightPanel: React.FC<{
     scoreBoard: IScoreBoard,
     fetchScoreboard: () => void
 }> = ({ scoreBoard, fetchScoreboard }) => {
+    const isOverEnd = scoreBoard.isOverEnd;
 
     return (
         <div className="p-4 border-l border-gray-300">
@@ -88,6 +89,7 @@ const RightPanel: React.FC<{
                 <table className="w-full border text-center">
                     <thead>
                         <tr>
+                            <th className="w-max"></th>
                             <th>Name</th>
                             <th>Runs</th>
                             <th>Overs</th>
@@ -97,7 +99,11 @@ const RightPanel: React.FC<{
                         {
                             scoreBoard.bowlers?.map(bowler => {
                                 return <tr key={bowler.name}>
-                                    <td>{bowler.name} {bowler.isBowling ? '*' : ''}</td>
+                                    <td className="w-max">
+                                        {isOverEnd && <button className="">Select</button>}
+                                    </td>
+                                    <td>
+                                        {bowler.name} {bowler.isBowling ? '*' : ''}</td>
                                     <td>{bowler.runs}</td>
                                     <td>{bowler.overs}</td>
                                 </tr>
