@@ -50,6 +50,7 @@ export interface IScoreBoard {
   }>[];
 
   bowlers: Partial<{
+    _id: string;
     name: string;
     runs: number;
     overs: number;
@@ -184,7 +185,7 @@ const App: React.FC = () => {
         }} className="border p-4 py-2 border-gray-500">Reset Match Scoreboard</button>
       </div>
       <div className="w-5/12">
-        <RightPanel scoreBoard={scoreBoard} fetchScoreboard={fetchScoreBoard} />
+        <RightPanel scoreBoard={scoreBoard} fetchScoreboard={fetchScoreBoard} matchId={matchId} />
         <Commentary commentaries={scoreBoard.ballbyball} toggleEditMode={toggleEditMode} isEditMode={isEditMode} />
       </div>
     </div>

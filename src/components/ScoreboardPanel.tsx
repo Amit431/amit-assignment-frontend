@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IScoreBoard } from "../App";
 import axios from "axios";
 
@@ -19,9 +19,24 @@ const TeamScore = ({ teamName, score, overs, wickets }: { teamName: string, scor
 
 const RightPanel: React.FC<{
     scoreBoard: IScoreBoard,
-    fetchScoreboard: () => void
-}> = ({ scoreBoard, fetchScoreboard }) => {
-    const isOverEnd = scoreBoard.isOverEnd;
+    fetchScoreboard: () => void,
+    matchId: string
+}> = ({ scoreBoard, fetchScoreboard, matchId }) => {
+    const [isOverEnd, setIsOverEnd] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsOverEnd(scoreBoard.isOverEnd || scoreBoard.teamA.overs === '0.0')
+    }, [scoreBoard.isOverEnd, scoreBoard.teamA.overs])
+
+    async function changeBowler(bowlerId: string) {
+        try {
+            await axios.get(`${import.meta.env.VITE_SERVER_API_URL}/match/select/${matchId}/${bowlerId}`)
+            fetchScoreboard()
+            setIsOverEnd(false)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className="p-4 border-l border-gray-300">
@@ -100,7 +115,7 @@ const RightPanel: React.FC<{
                             scoreBoard.bowlers?.map(bowler => {
                                 return <tr key={bowler.name}>
                                     <td className="w-max">
-                                        {isOverEnd && <button className="">Select</button>}
+                                        {isOverEnd && <button onClick={() => changeBowler(bowler?._id || '')} className="border border-yellow-300 bg-yellow-200 hover:bg-yellow-300 px-4 text-sm rounded-sm">Select</button>}
                                     </td>
                                     <td>
                                         {bowler.name} {bowler.isBowling ? '*' : ''}</td>
